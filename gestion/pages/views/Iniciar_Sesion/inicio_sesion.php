@@ -16,10 +16,11 @@ if (isset($_POST['UserOREmail']) && isset($_POST['Contrasena'])) {
         $password = trim($_POST['Contrasena']);
         
         // Preparar la consulta usando una consulta preparada de PDO
-        $stmt = $conex->prepare('SELECT * FROM cuentas_registro WHERE cr_mail = :useroremail OR cr_usuario = :useroremail');
+        $stmt = $conex->prepare('SELECT * FROM cuentas_registro WHERE cr_mail = :useroremail1 OR cr_usuario = :useroremail2');
         
         // Enlazar el parámetro de la consulta para evitar inyección SQL
-        $stmt->bindParam(':useroremail', $useroremail, PDO::PARAM_STR);
+        $stmt->bindParam(':useroremail1', $useroremail, PDO::PARAM_STR);
+        $stmt->bindParam(':useroremail2', $useroremail, PDO::PARAM_STR);
         
         // Ejecutar la consulta
         $stmt->execute();
@@ -31,7 +32,7 @@ if (isset($_POST['UserOREmail']) && isset($_POST['Contrasena'])) {
             // Verificar la contraseña usando password_verify
             if (password_verify($password, $user_data['cr_password'])) {
                 $_SESSION['UserOREmail'] = $user_data['cr_id'];
-                header("Location: ../Pagina_usuario/pagina_usuario.php");
+                header("Location: ../Pagina_usuario/pagina_principal.php");
                 exit();
             } else {
                 echo "<h3>¡La contraseña es incorrecta!</h3>";
